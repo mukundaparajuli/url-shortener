@@ -1,6 +1,8 @@
 const Router = require("express");
 const router = Router();
-const urlController = require("../controllers/urlController")
-router.route("/api/postUrl").post(urlController)
+const { posturl, getShortenedUrl } = require("../controllers/urlController");
+
+router.route("/posturl").post(posturl);
+router.get("/geturl/:shortId", getShortenedUrl);
 
 module.exports = router;

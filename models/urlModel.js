@@ -9,6 +9,7 @@ const shortenUrlSchema = new Schema({
     shortUrl: {
         type: String,
         required: true,
+        unique: true,
     }
 }, {
     timestamps: true,

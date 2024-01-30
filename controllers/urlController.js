@@ -1,17 +1,32 @@
 const shortid = require('shortid')
 const ShortUrl = require("../models/urlModel")
-// @desc post url
-// @route api/posturl
-// 
-const posturl = (req, res) => {
+
+const posturl = async (req, res) => {
     const { longUrl } = req.body;
     if (!longUrl) {
-        res.sendStatus(403);
+        res.sendStatus(400);
         throw new Error("Long Url cant be left unfilled!")
     }
-    const url = ShortUrl.create({ fullUrl: req.body.longUrl })
-    console.log(url)
-    res.json(shortid())
+    try {
+        console.log(longUrl)
+        const shortenedUrl = shortid();
+        console.log(shortenedUrl)
+        const url = await ShortUrl.create({ fullUrl: longUrl, shortUrl: shortenedUrl })
+        res.json(url)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-module.exports = posturl;
+//@route /geturl/:shortid
+const getShortenedUrl = async (req, res) => {
+    const url = await ShortUrl.findOne({ shortUrl: req.params.shortId });
+
+    if (url) {
+        res.redirect(url.longUrl);
+    } else {
+        res.sendStatus(404);
+    }
+
+}
+module.exports = { posturl, getShortenedUrl };

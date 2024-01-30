@@ -5,13 +5,8 @@ const connectToDatabase = require("./config/dbConnection")
 
 connectToDatabase();
 
-app.set("view engine", "ejs")
-app.use(express.urlencoded({ extended: false }))
 
 app.use(express.json());
-app.use("/", require("./routers/urlRoute"));
-app.get("/", (req, res) => {
-    res.render('index')
-})
+app.use("/api/", require("./routers/urlRoute"));
 
 app.listen(5000);

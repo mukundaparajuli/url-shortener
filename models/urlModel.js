@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose")
 
-
-const shortenUrlSchema = new mongoose.Schema({
+const shortenUrlSchema = new Schema({
     fullUrl: {
         type: String,
         required: true,
@@ -14,4 +14,4 @@ const shortenUrlSchema = new mongoose.Schema({
     timestamps: true,
 })
 
-module.exports = model.Schema("ShortUrl", shortenUrlSchema);
+module.exports = model("ShortUrl", shortenUrlSchema);

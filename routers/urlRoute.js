@@ -3,6 +3,6 @@ const router = Router();
 const { posturl, getShortenedUrl } = require("../controllers/urlController");
 
 router.route("/posturl").post(posturl);
-router.get("/geturl/:shortId", getShortenedUrl);
+router.route("/geturl/:id").get(getShortenedUrl);
 
 module.exports = router;

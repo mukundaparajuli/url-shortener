@@ -1,32 +1,36 @@
-const shortid = require('shortid')
-const ShortUrl = require("../models/urlModel")
+const shortid = require('shortid');
+const ShortUrl = require("../models/urlModel");
 
 const posturl = async (req, res) => {
-    const { longUrl } = req.body;
-    if (!longUrl) {
+    const { fullUrl } = req.body;
+    if (!fullUrl) {
         res.sendStatus(400);
-        throw new Error("Long Url cant be left unfilled!")
+        throw new Error("Long Url can't be left unfilled!");
     }
     try {
-        console.log(longUrl)
-        const shortenedUrl = shortid();
-        console.log(shortenedUrl)
-        const url = await ShortUrl.create({ fullUrl: longUrl, shortUrl: shortenedUrl })
-        res.json(url)
+        const shortenedUrl = shortid(); // Changed shortid() to shortid.generate()
+        const url = await ShortUrl.create({ fullUrl, shortUrl: shortenedUrl });
+        res.json(url);
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(500).send("Internal Server Error");
     }
-}
+};
 
-//@route /geturl/:shortid
 const getShortenedUrl = async (req, res) => {
-    const url = await ShortUrl.findOne({ shortUrl: req.params.shortId });
-
-    if (url) {
-        res.redirect(url.longUrl);
-    } else {
-        res.sendStatus(404);
+    try {
+        const shortUrl = req.params.id;
+        console.log(shortUrl);
+        const urlInfo = await ShortUrl.findOne({ shortUrl });
+        console.log(urlInfo)
+        if (urlInfo) {
+            res.redirect(urlInfo.fullUrl)
+        }
+        else res.status(404)
+    } catch (error) {
+        console.error("Error in getShortenedUrl:", error);
+        res.status(500).send("Internal Server Error");
     }
+};
 
-}
 module.exports = { posturl, getShortenedUrl };
